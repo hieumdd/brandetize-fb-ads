@@ -1,7 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
-import bodyParser from 'body-parser';
 import { ValidatedRequest, createValidator } from 'express-joi-validation';
+import bodyParser from 'body-parser';
 import Joi from 'joi';
+import { isObject } from 'lodash';
 
 import { getLogger } from './logging.service';
 import * as pipelines from './pipeline/pipeline.const';
@@ -51,8 +52,8 @@ app.use(
     },
 );
 
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-    if (Joi.isError(error.error)) {
+app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
+    if (isObject(error) && 'error' in error && Joi.isError(error.error)) {
         logger.warn({ error: error.error });
         res.status(400).json({ error: error.error });
         return;
