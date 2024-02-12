@@ -3,15 +3,17 @@ import { pipeline } from 'node:stream/promises';
 import ndjson from 'ndjson';
 
 import dayjs from '../dayjs';
-import { logger } from '../logging.service';
+import { getLogger } from '../logging.service';
 import { createLoadStream } from '../bigquery.service';
 import { createTasks } from '../cloud-tasks.service';
 import { getAccounts } from '../facebook/account.service';
 import { CreatePipelineTasksBody, PipelineOptions } from './pipeline.request.dto';
 import * as pipelines from './pipeline.const';
 
+const logger = getLogger(__filename);
+
 export const runPipeline = async (pipeline_: pipelines.Pipeline, options: PipelineOptions) => {
-    logger.info({ fn: 'pipeline.service:runPipeline', pipeline: pipeline_.name, options });
+    logger.info('pipeline start', { pipeline: pipeline_.name, options });
 
     return pipeline(
         await pipeline_.getExtractStream(options),
@@ -40,7 +42,7 @@ export const runPipeline = async (pipeline_: pipelines.Pipeline, options: Pipeli
 };
 
 export const createInsightsPipelineTasks = async ({ start, end }: CreatePipelineTasksBody) => {
-    logger.info({ fn: 'pipeline.service:createInsightsPipelineTasks', options: { start, end } });
+    logger.info('creating insights pipeline tasks', { start, end });
 
     const accounts = await getAccounts(618162358531378);
 
