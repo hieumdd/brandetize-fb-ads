@@ -3,8 +3,9 @@ import { Readable, Transform, Writable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import ndjson from 'ndjson';
 
-import dayjs from '../dayjs';
 import { getLogger } from '../logging.service';
+import dayjs from '../dayjs';
+import { getProjectNumber } from '../resource-manager.service';
 import { createLoadStream } from '../bigquery.service';
 import { createWriteStream } from '../storage.service';
 import { createTasks } from '../cloud-tasks.service';
@@ -15,7 +16,9 @@ import * as pipelines from './pipeline.const';
 const logger = getLogger(__filename);
 
 export const runPipeline = async (pipeline_: pipelines.Pipeline, options: PipelineOptions) => {
-    logger.info('pipeline start', { pipeline: pipeline_.name, options });
+    logger.info('running pipeline', { pipeline: pipeline_.name, options });
+
+    const projectNumber = await getProjectNumber();
 
     const transform = () => {
         return new Transform({
@@ -55,7 +58,11 @@ export const runPipeline = async (pipeline_: pipelines.Pipeline, options: Pipeli
                     `_date_start=${key}`,
                     'data.json',
                 );
-                pipeline(Readable.from(rows), ndjson.stringify(), createWriteStream(name))
+                pipeline(
+                    Readable.from(rows),
+                    ndjson.stringify(),
+                    createWriteStream(`facebook-${projectNumber}`, name),
+                )
                     .then(() => callback())
                     .catch((error) => callback(error));
             },
