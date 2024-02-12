@@ -1,6 +1,6 @@
 import { Readable } from 'node:stream';
-import qs from 'query-string';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import qs from 'query-string';
 
 import { getLogger } from '../logging.service';
 
