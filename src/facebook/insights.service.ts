@@ -1,8 +1,10 @@
 import { setTimeout } from 'node:timers/promises';
 
-import { logger } from '../logging.service';
+import { getLogger } from '../logging.service';
 import { getClient, getExtractStream } from './api.service';
 import { PipelineOptions } from '../pipeline/pipeline.request.dto';
+
+const logger = getLogger(__filename);
 
 export type GetInsightsConfig = {
     level: string;
@@ -46,18 +48,12 @@ export const getInsightsStream = (config: GetInsightsConfig) => {
             }
 
             if (data.async_status === 'Job Failed') {
-                logger.error({
-                    fn: 'facebook:insights.service:pollReport',
-                    message: data.async_status,
-                });
+                logger.error('job failed', data);
                 throw new Error(data.async_status);
             }
 
             if (delay > 5 * 60_000) {
-                logger.error({
-                    fn: 'facebook:insights.service:pollReport',
-                    message: 'Job Timeout',
-                });
+                logger.error('job timeout', data);
                 throw new Error('Job Timeout');
             }
 

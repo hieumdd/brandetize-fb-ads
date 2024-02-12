@@ -2,15 +2,15 @@ import { Readable } from 'node:stream';
 import qs from 'query-string';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-import { logger } from '../logging.service';
+import { getLogger } from '../logging.service';
 
-type DopplerSecretResponse = { value: { raw: string } };
+const logger = getLogger(__filename);
 
 export const getClient = async () => {
     const API_VER = 'v18.0';
 
     const accessToken = await axios
-        .request<DopplerSecretResponse>({
+        .request<{ value: { raw: string } }>({
             method: 'GET',
             url: 'https://api.doppler.com/v3/configs/config/secret',
             params: { project: 'eaglytics', config: 'prd', name: 'FACEBOOK_ACCESS_TOKEN' },
@@ -45,11 +45,6 @@ export const getClient = async () => {
     return client;
 };
 
-export type GetResponse = {
-    data: Record<string, any>[];
-    paging?: { cursors: { after: string }; next: string };
-};
-
 export const getExtractStream = (
     client: AxiosInstance,
     config: (after?: string) => AxiosRequestConfig,
@@ -57,6 +52,11 @@ export const getExtractStream = (
     const stream = new Readable({ objectMode: true, read: () => {} });
 
     const _get = (after?: string) => {
+        type GetResponse = {
+            data: Record<string, any>[];
+            paging?: { cursors: { after: string }; next: string };
+        };
+
         client
             .request<GetResponse>(config(after))
             .then((response) => response.data)

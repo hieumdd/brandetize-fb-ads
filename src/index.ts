@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import { ValidatedRequest, createValidator } from 'express-joi-validation';
 import Joi from 'joi';
 
-import { logger } from './logging.service';
+import { getLogger } from './logging.service';
 import * as pipelines from './pipeline/pipeline.const';
 import { runPipeline, createInsightsPipelineTasks } from './pipeline/pipeline.service';
 import {
@@ -13,6 +13,7 @@ import {
     RunPipelineRequest,
 } from './pipeline/pipeline.request.dto';
 
+const logger = getLogger(__filename);
 const app = express();
 const validator = createValidator({ passError: true, joi: { stripUnknown: true } });
 
@@ -21,7 +22,7 @@ app.use(bodyParser.json());
 app.use(({ method, path, body }, res, next) => {
     logger.info({ method, path, body });
     res.on('finish', () => {
-        logger.debug({ method, path, body, status: res.statusCode });
+        logger.info({ method, path, body, status: res.statusCode });
     });
     next();
 });

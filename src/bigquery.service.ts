@@ -1,5 +1,5 @@
 import { BigQuery } from '@google-cloud/bigquery';
-import { logger } from './logging.service';
+import { getLogger } from './logging.service';
 
 const client = new BigQuery();
 
@@ -20,5 +20,7 @@ export const createLoadStream = (options: CreateLoadStreamConfig, table: string)
             createDisposition: 'CREATE_IF_NEEDED',
             writeDisposition: options.writeDisposition,
         })
-        .on('job', () => logger.debug({ fn: 'bigquery.service:load', table }));
+        .on('job', () => {
+            getLogger(__filename).debug({ dataset: DATASET, table, schema: options.schema });
+        });
 };
