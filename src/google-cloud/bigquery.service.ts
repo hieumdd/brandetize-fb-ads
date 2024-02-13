@@ -24,7 +24,7 @@ export const createLoadStream = (options: CreateLoadStreamConfig, table: string)
             writeDisposition: options.writeDisposition,
         })
         .on('job', () => {
-            getLogger(__filename).debug({ dataset: DATASET, table, schema: options.schema });
+            logger.debug({ dataset: DATASET, table, schema: options.schema });
         });
 };
 
@@ -40,7 +40,7 @@ export const createExternalTable = async (dataset: string, options: CreateExtern
 
     const table = client.dataset(dataset).table(tableName);
     if (await table.exists().then(([response]) => response)) {
-        logger.debug(`table ${table.id} exists, replacing`);
+        logger.debug(`Replacing table ${table.id}`);
         await table.delete();
     }
     await table.create({
@@ -54,4 +54,5 @@ export const createExternalTable = async (dataset: string, options: CreateExtern
                 : undefined,
         },
     });
+    logger.debug(`Table ${table.id} created`);
 };

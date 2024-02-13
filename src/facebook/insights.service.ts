@@ -48,12 +48,12 @@ export const getInsightsStream = (config: GetInsightsConfig) => {
             }
 
             if (data.async_status === 'Job Failed') {
-                logger.error('job failed', data);
+                logger.error('Facebook async job failed', data);
                 throw new Error(data.async_status);
             }
 
             if (delay > 5 * 60_000) {
-                logger.error('job timeout', data);
+                logger.error('Facebook async job timeout', data);
                 throw new Error('Job Timeout');
             }
 
