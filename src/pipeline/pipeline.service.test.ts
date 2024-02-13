@@ -1,11 +1,11 @@
 import * as pipelines from './pipeline.const';
-import { createInsightsPipelineTasks, runPipeline } from './pipeline.service';
+import { createInsightsPipelineTasks, runInsightsPipeline } from './pipeline.service';
 
 describe('pipeline', () => {
-    it.each([pipelines.ADS_INSIGHTS])(
+    it.each([pipelines.AdsInsights])(
         '$name',
         async (pipeline) => {
-            return await runPipeline(pipeline, {
+            return await runInsightsPipeline(pipeline, {
                 accountId: '662385836106323',
                 start: '2023-12-01',
                 end: '2024-12-01',

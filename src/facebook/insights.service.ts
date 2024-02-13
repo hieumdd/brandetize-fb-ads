@@ -2,7 +2,7 @@ import { setTimeout } from 'node:timers/promises';
 
 import { getLogger } from '../logging.service';
 import { getClient, getExtractStream } from './api.service';
-import { PipelineOptions } from '../pipeline/pipeline.request.dto';
+import { FacebookRequestOptions } from '../pipeline/pipeline.request.dto';
 
 const logger = getLogger(__filename);
 
@@ -13,7 +13,7 @@ export type GetInsightsConfig = {
 };
 
 export const getInsightsStream = (config: GetInsightsConfig) => {
-    return async (options: PipelineOptions) => {
+    return async (options: FacebookRequestOptions) => {
         const client = await getClient();
 
         const requestReport = async (): Promise<string> => {
@@ -48,12 +48,12 @@ export const getInsightsStream = (config: GetInsightsConfig) => {
             }
 
             if (data.async_status === 'Job Failed') {
-                logger.error('job failed', data);
+                logger.error('Facebook async job failed', data);
                 throw new Error(data.async_status);
             }
 
             if (delay > 5 * 60_000) {
-                logger.error('job timeout', data);
+                logger.error('Facebook async job timeout', data);
                 throw new Error('Job Timeout');
             }
 

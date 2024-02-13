@@ -6,12 +6,12 @@ import { isObject } from 'lodash';
 
 import { getLogger } from './logging.service';
 import * as pipelines from './pipeline/pipeline.const';
-import { runPipeline, createInsightsPipelineTasks } from './pipeline/pipeline.service';
+import { runInsightsPipeline, createInsightsPipelineTasks } from './pipeline/pipeline.service';
 import {
     CreatePipelineTasksBodySchema,
     CreatePipelineTasksRequest,
-    RunPipelineBodySchema,
-    RunPipelineRequest,
+    RunInsightsPipelineBodySchema,
+    RunInsightsPipelineRequest,
 } from './pipeline/pipeline.request.dto';
 
 const logger = getLogger(__filename);
@@ -40,9 +40,9 @@ app.use(
 
 app.use(
     '/',
-    validator.body(RunPipelineBodySchema),
-    ({ body }: ValidatedRequest<RunPipelineRequest>, res, next) => {
-        runPipeline(pipelines[body.pipeline], {
+    validator.body(RunInsightsPipelineBodySchema),
+    ({ body }: ValidatedRequest<RunInsightsPipelineRequest>, res, next) => {
+        runInsightsPipeline(pipelines[body.pipeline], {
             accountId: body.accountId,
             start: body.start,
             end: body.end,
