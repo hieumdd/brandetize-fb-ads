@@ -6,3 +6,8 @@ export const getBucketName = async () => {
 };
 
 export const DATASET = 'FacebookTesting';
+
+export const QUEUE_CONFIG = {
+    location: 'us-central1',
+    queue: 'fb-ads',
+};

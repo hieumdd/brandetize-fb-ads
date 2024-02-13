@@ -2,12 +2,14 @@ import { CloudTasksClient, protos } from '@google-cloud/tasks';
 import HttpMethod = protos.google.cloud.tasks.v2.HttpMethod;
 import { v4 as uuidv4 } from 'uuid';
 
-const LOCATION = 'us-central1';
-const QUEUE = 'fb-ads';
+export type QueueConfig = { queue: string; location: string };
 
-const URL = process.env.PUBLIC_URL || '';
-
-export const createTasks = async <P>(payloads: P[], nameFn: (p: P) => string) => {
+export const createTasks = async <P>(
+    { location, queue }: QueueConfig,
+    payloads: P[],
+    nameFn: (p: P) => string,
+) => {
+    const URL = process.env.PUBLIC_URL || '';
     const client = new CloudTasksClient();
 
     const [projectId, serviceAccountEmail] = await Promise.all([
@@ -16,9 +18,9 @@ export const createTasks = async <P>(payloads: P[], nameFn: (p: P) => string) =>
     ]);
 
     const tasks = payloads.map((p) => ({
-        parent: client.queuePath(projectId, LOCATION, QUEUE),
+        parent: client.queuePath(projectId, location, queue),
         task: {
-            name: client.taskPath(projectId, LOCATION, QUEUE, `${nameFn(p)}-${uuidv4()}`),
+            name: client.taskPath(projectId, location, queue, `${nameFn(p)}-${uuidv4()}`),
             httpRequest: {
                 httpMethod: HttpMethod.POST,
                 headers: { 'Content-Type': 'application/json' },

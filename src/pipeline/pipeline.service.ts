@@ -3,9 +3,9 @@ import { pipeline } from 'node:stream/promises';
 import ndjson from 'ndjson';
 
 import { getLogger } from '../logging.service';
-import { getBucketName } from '../config';
-import { createWriteStream } from '../google-cloud/storage.service';
+import { QUEUE_CONFIG, getBucketName } from '../config';
 import { createTasks } from '../google-cloud/cloud-tasks.service';
+import { createWriteStream } from '../google-cloud/storage.service';
 import { getAccounts } from '../facebook/account.service';
 import { CreatePipelineTasksBody, FacebookRequestOptions } from './pipeline.request.dto';
 import { RunPipelineOptions } from './pipeline.utils';
@@ -45,7 +45,11 @@ export const createInsightsPipelineTasks = async ({ start, end }: CreatePipeline
                     pipeline,
                 }));
             })
-            .map((data) => createTasks(data, (task) => [task.pipeline, task.accountId].join('-'))),
+            .map((data) => {
+                return createTasks(QUEUE_CONFIG, data, (task) => {
+                    return [task.pipeline, task.accountId].join('-');
+                });
+            }),
         pipeline(
             Readable.from(accounts),
             ndjson.stringify(),
