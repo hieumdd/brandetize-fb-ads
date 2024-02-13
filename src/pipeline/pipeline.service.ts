@@ -3,7 +3,7 @@ import { pipeline } from 'node:stream/promises';
 import ndjson from 'ndjson';
 
 import { getLogger } from '../logging.service';
-import { getProjectNumber } from '../resource-manager.service';
+import { getBucketName } from '../config';
 import { createWriteStream } from '../storage.service';
 import { createTasks } from '../cloud-tasks.service';
 import { getAccounts } from '../facebook/account.service';
@@ -12,11 +12,6 @@ import { RunPipelineOptions } from './pipeline.utils';
 import * as pipelines from './pipeline.const';
 
 const logger = getLogger(__filename);
-
-const getBucketName = async () => {
-    const projectNumber = await getProjectNumber();
-    return `facebook-${projectNumber}`;
-};
 
 type RunInsightsPipelineConfig = {
     name: string;

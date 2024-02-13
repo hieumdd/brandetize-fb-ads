@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { Readable, Transform, Writable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import ndjson from 'ndjson';
@@ -69,7 +68,7 @@ export const createInsightsPipeline = (options: CreateInsightsPipelineConfig) =>
         const sourceStream = await extractStream(options);
         const writeStream = partitionedWrite(options.bucketName, (key) => {
             const { accountId } = options;
-            return path.join(name, `_account_id=${accountId}`, `_date_start=${key}`, 'data.json');
+            return `insights/${name}/_account_id=${accountId}/_date_start=${key}/data.json`;
         });
         return await pipeline(sourceStream, standardize, grouping, writeStream);
     };
