@@ -4,7 +4,7 @@ import ndjson from 'ndjson';
 import Joi from 'joi';
 
 import dayjs from '../dayjs';
-import { createWriteStream } from '../storage.service';
+import { createWriteStream } from '../google-cloud/storage.service';
 import { FacebookRequestOptions } from './pipeline.request.dto';
 
 const validateTransform = (schema: Joi.Schema) => {

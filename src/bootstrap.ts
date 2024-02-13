@@ -1,5 +1,5 @@
 import { getLogger } from './logging.service';
-import { createExternalTable } from './bigquery.service';
+import { createExternalTable } from './google-cloud/bigquery.service';
 import * as pipelines from './pipeline/pipeline.const';
 import { DATASET, getBucketName } from './config';
 

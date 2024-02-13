@@ -4,8 +4,8 @@ import ndjson from 'ndjson';
 
 import { getLogger } from '../logging.service';
 import { getBucketName } from '../config';
-import { createWriteStream } from '../storage.service';
-import { createTasks } from '../cloud-tasks.service';
+import { createWriteStream } from '../google-cloud/storage.service';
+import { createTasks } from '../google-cloud/cloud-tasks.service';
 import { getAccounts } from '../facebook/account.service';
 import { CreatePipelineTasksBody, FacebookRequestOptions } from './pipeline.request.dto';
 import { RunPipelineOptions } from './pipeline.utils';

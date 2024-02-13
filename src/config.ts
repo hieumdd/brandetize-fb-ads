@@ -1,4 +1,4 @@
-import { getProjectNumber } from './resource-manager.service';
+import { getProjectNumber } from './google-cloud/resource-manager.service';
 
 export const getBucketName = async () => {
     const projectNumber = await getProjectNumber();
