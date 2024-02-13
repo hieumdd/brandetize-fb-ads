@@ -1,7 +1,7 @@
 import { Storage } from '@google-cloud/storage';
 
-const storage = new Storage();
+const storageClient = new Storage();
 
 export const createWriteStream = (bucketName: string, fileName: string) => {
-    return storage.bucket(bucketName).file(fileName).createWriteStream();
+    return storageClient.bucket(bucketName).file(fileName).createWriteStream();
 };
