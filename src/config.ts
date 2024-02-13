@@ -5,7 +5,7 @@ export const getBucketName = async () => {
     return `facebook-${projectNumber}`;
 };
 
-export const DATASET = 'FacebookTesting';
+export const DATASET = 'Facebook';
 
 export const QUEUE_CONFIG = {
     location: 'us-central1',
