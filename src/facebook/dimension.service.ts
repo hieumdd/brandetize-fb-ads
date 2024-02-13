@@ -1,5 +1,5 @@
 import { getClient, getExtractStream } from './api.service';
-import { PipelineOptions } from '../pipeline/pipeline.request.dto';
+import { FacebookRequestOptions } from '../pipeline/pipeline.request.dto';
 
 type GetDimensionsConfig = {
     endpoint: string;
@@ -7,7 +7,7 @@ type GetDimensionsConfig = {
 };
 
 export const getDimensionStream = ({ endpoint, fields }: GetDimensionsConfig) => {
-    return async ({ accountId }: PipelineOptions) => {
+    return async ({ accountId }: FacebookRequestOptions) => {
         const client = await getClient();
 
         return getExtractStream(client, (after) => ({

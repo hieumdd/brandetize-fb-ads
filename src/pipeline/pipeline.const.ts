@@ -1,24 +1,15 @@
-import { Readable } from 'node:stream';
 import Joi from 'joi';
 
-import { CreateLoadStreamConfig } from '../bigquery.service';
 import { getInsightsStream } from '../facebook/insights.service';
-import { PipelineOptions } from './pipeline.request.dto';
-
-export type Pipeline = {
-    name: string;
-    getExtractStream: (options: PipelineOptions) => Promise<Readable>;
-    validationSchema: Joi.Schema;
-    loadConfig: CreateLoadStreamConfig;
-};
+import { createInsightsPipeline } from './pipeline.utils';
 
 const actionBreakdownSchema = Joi.array()
     .items({ action_type: Joi.string(), value: Joi.number() })
     .optional();
 
-export const ADS_INSIGHTS: Pipeline = {
+export const AdsInsights = createInsightsPipeline({
     name: 'AdsInsights',
-    getExtractStream: getInsightsStream({
+    extractStream: getInsightsStream({
         level: 'ad',
         fields: [
             'date_start',
@@ -67,46 +58,43 @@ export const ADS_INSIGHTS: Pipeline = {
         actions: actionBreakdownSchema,
         action_values: actionBreakdownSchema,
     }),
-    loadConfig: {
-        schema: [
-            { name: 'date_start', type: 'DATE' },
-            { name: 'date_stop', type: 'DATE' },
-            { name: 'account_id', type: 'NUMERIC' },
-            { name: 'campaign_id', type: 'NUMERIC' },
-            { name: 'campaign_name', type: 'STRING' },
-            { name: 'adset_id', type: 'NUMERIC' },
-            { name: 'adset_name', type: 'STRING' },
-            { name: 'ad_id', type: 'NUMERIC' },
-            { name: 'ad_name', type: 'STRING' },
-            { name: 'cpc', type: 'NUMERIC' },
-            { name: 'cpm', type: 'NUMERIC' },
-            { name: 'ctr', type: 'NUMERIC' },
-            { name: 'frequency', type: 'NUMERIC' },
-            { name: 'impressions', type: 'NUMERIC' },
-            { name: 'inline_link_click_ctr', type: 'NUMERIC' },
-            { name: 'inline_link_clicks', type: 'NUMERIC' },
-            { name: 'reach', type: 'NUMERIC' },
-            { name: 'spend', type: 'NUMERIC' },
-            {
-                name: 'actions',
-                type: 'RECORD',
-                mode: 'REPEATED',
-                fields: [
-                    { name: 'action_type', type: 'STRING' },
-                    { name: 'value', type: 'NUMERIC' },
-                ],
-            },
-            {
-                name: 'action_values',
-                type: 'RECORD',
-                mode: 'REPEATED',
-                fields: [
-                    { name: 'action_type', type: 'STRING' },
-                    { name: 'value', type: 'NUMERIC' },
-                ],
-            },
-            { name: 'clicks', type: 'NUMERIC' },
-        ],
-        writeDisposition: 'WRITE_APPEND',
-    },
-};
+    schema: [
+        { name: 'date_start', type: 'DATE' },
+        { name: 'date_stop', type: 'DATE' },
+        { name: 'account_id', type: 'NUMERIC' },
+        { name: 'campaign_id', type: 'NUMERIC' },
+        { name: 'campaign_name', type: 'STRING' },
+        { name: 'adset_id', type: 'NUMERIC' },
+        { name: 'adset_name', type: 'STRING' },
+        { name: 'ad_id', type: 'NUMERIC' },
+        { name: 'ad_name', type: 'STRING' },
+        { name: 'cpc', type: 'NUMERIC' },
+        { name: 'cpm', type: 'NUMERIC' },
+        { name: 'ctr', type: 'NUMERIC' },
+        { name: 'frequency', type: 'NUMERIC' },
+        { name: 'impressions', type: 'NUMERIC' },
+        { name: 'inline_link_click_ctr', type: 'NUMERIC' },
+        { name: 'inline_link_clicks', type: 'NUMERIC' },
+        { name: 'reach', type: 'NUMERIC' },
+        { name: 'spend', type: 'NUMERIC' },
+        {
+            name: 'actions',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        {
+            name: 'action_values',
+            type: 'RECORD',
+            mode: 'REPEATED',
+            fields: [
+                { name: 'action_type', type: 'STRING' },
+                { name: 'value', type: 'NUMERIC' },
+            ],
+        },
+        { name: 'clicks', type: 'NUMERIC' },
+    ],
+});
