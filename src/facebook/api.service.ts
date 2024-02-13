@@ -45,10 +45,7 @@ export const getClient = async () => {
     return client;
 };
 
-export const getExtractStream = (
-    client: AxiosInstance,
-    config: (after?: string) => AxiosRequestConfig,
-) => {
+export const getExtractStream = (client: AxiosInstance, config: (after?: string) => AxiosRequestConfig) => {
     const stream = new Readable({ objectMode: true, read: () => {} });
 
     const _get = (after?: string) => {

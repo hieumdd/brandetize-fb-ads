@@ -17,11 +17,7 @@ export interface CreatePipelineTasksRequest extends ValidatedRequestSchema {
 }
 
 export const CreatePipelineTasksBodySchema = Joi.object<CreatePipelineTasksBody>({
-    start: Joi.string()
-        .optional()
-        .empty(null)
-        .allow(null)
-        .default(dayjs.utc().subtract(7, 'day').format('YYYY-MM-DD')),
+    start: Joi.string().optional().empty(null).allow(null).default(dayjs.utc().subtract(7, 'day').format('YYYY-MM-DD')),
     end: Joi.string().optional().empty(null).allow(null).default(dayjs.utc().format('YYYY-MM-DD')),
 });
 

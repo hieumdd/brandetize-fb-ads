@@ -50,10 +50,6 @@ export const createInsightsPipelineTasks = async ({ start, end }: CreatePipeline
                     return [task.pipeline, task.accountId].join('-');
                 });
             }),
-        pipeline(
-            Readable.from(accounts),
-            ndjson.stringify(),
-            createWriteStream(bucketName, 'accounts.json'),
-        ),
+        pipeline(Readable.from(accounts), ndjson.stringify(), createWriteStream(bucketName, 'accounts.json')),
     ]).then(() => accounts.length);
 };

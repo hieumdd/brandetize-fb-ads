@@ -3,9 +3,7 @@ import Joi from 'joi';
 import { getInsightsStream } from '../facebook/insights.service';
 import { createInsightsPipeline } from './pipeline.utils';
 
-const actionBreakdownSchema = Joi.array()
-    .items({ action_type: Joi.string(), value: Joi.number() })
-    .optional();
+const actionBreakdownSchema = Joi.array().items({ action_type: Joi.string(), value: Joi.number() }).optional();
 
 export const AdsInsights = createInsightsPipeline({
     name: 'AdsInsights',

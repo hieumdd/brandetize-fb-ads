@@ -27,9 +27,7 @@ export const createExternalTable = async (dataset: string, options: CreateExtern
             sourceUris,
             sourceFormat: 'NEWLINE_DELIMITED_JSON',
             ignoreUnknownValues: true,
-            hivePartitioningOptions: sourceUriPrefix
-                ? { mode: 'CUSTOM', sourceUriPrefix }
-                : undefined,
+            hivePartitioningOptions: sourceUriPrefix ? { mode: 'CUSTOM', sourceUriPrefix } : undefined,
         },
     });
     logger.debug(`Table ${table.id} created`);

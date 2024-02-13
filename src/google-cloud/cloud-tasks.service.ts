@@ -6,11 +6,7 @@ const tasksClient = new CloudTasksClient();
 
 export type QueueConfig = { queue: string; location: string };
 
-export const createTasks = async <P>(
-    { location, queue }: QueueConfig,
-    payloads: P[],
-    nameFn: (p: P) => string,
-) => {
+export const createTasks = async <P>({ location, queue }: QueueConfig, payloads: P[], nameFn: (p: P) => string) => {
     const URL = process.env.PUBLIC_URL || '';
 
     const [projectId, serviceAccountEmail] = await Promise.all([

@@ -53,11 +53,7 @@ export const createInsightsPipeline = (options: CreateInsightsPipelineConfig) =>
         return new Writable({
             objectMode: true,
             write: ([key, rows], _, callback) => {
-                pipeline(
-                    Readable.from(rows),
-                    ndjson.stringify(),
-                    createWriteStream(bucketName, fileName(key)),
-                )
+                pipeline(Readable.from(rows), ndjson.stringify(), createWriteStream(bucketName, fileName(key)))
                     .then(() => callback())
                     .catch((error) => callback(error));
             },
