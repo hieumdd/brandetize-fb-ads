@@ -7,8 +7,6 @@ import { getLogger } from '../logging.service';
 const logger = getLogger(__filename);
 
 export const getClient = async () => {
-    const API_VER = 'v18.0';
-
     const accessToken = await axios
         .request<{ value: { raw: string } }>({
             method: 'GET',
@@ -18,8 +16,16 @@ export const getClient = async () => {
         })
         .then(({ data }) => data.value.raw);
 
+    const apiVersion = await axios
+        .request({
+            method: 'GET',
+            url: 'https://graph.facebook.com/me',
+            params: { access_token: accessToken },
+        })
+        .then((response) => <string>response.headers['facebook-api-version']);
+
     const client = axios.create({
-        baseURL: `https://graph.facebook.com/${API_VER}`,
+        baseURL: `https://graph.facebook.com/${apiVersion}`,
         params: { access_token: accessToken },
         paramsSerializer: { serialize: (value) => qs.stringify(value, { arrayFormat: 'comma' }) },
     });
