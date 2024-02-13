@@ -1,5 +1,9 @@
 {
     "name": "brandetize-fb-ads",
+    "scripts": {
+        "format": "prettier -w ./src",
+        "bootstrap": "tsx -r dotenv/config ./src/bootstrap.ts"
+    },
     "devDependencies": {
         "@tsconfig/node18": "^18.2.2",
         "@types/express": "^4.17.21",
