@@ -11,8 +11,8 @@ export const getClient = async () => {
         .request<{ value: { raw: string } }>({
             method: 'GET',
             url: 'https://api.doppler.com/v3/configs/config/secret',
-            params: { project: 'eaglytics', config: 'prd', name: 'FACEBOOK_ACCESS_TOKEN' },
-            auth: { username: process.env.DOPPLER_TOKEN || '', password: '' },
+            params: { project: 'facebook', config: 'master', name: 'USER_ACCESS_TOKEN' },
+            auth: { username: process.env.DOPPLER_TOKEN ?? '', password: '' },
         })
         .then(({ data }) => data.value.raw);
 
