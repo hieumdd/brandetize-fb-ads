@@ -33,17 +33,14 @@ export const getClient = async () => {
     client.interceptors.response.use(
         (response) => response,
         (error) => {
-            if (axios.isAxiosError(error)) {
-                logger.error({
-                    error: {
-                        config: error.config,
-                        response: { data: error.response?.data, headers: error.response?.headers },
-                    },
-                });
-            } else {
-                logger.error({ error });
-            }
+            const meta = axios.isAxiosError(error)
+                ? {
+                      config: error.config,
+                      response: { data: error.response?.data, headers: error.response?.headers },
+                  }
+                : error;
 
+            logger.error({ error: meta });
             throw error;
         },
     );
