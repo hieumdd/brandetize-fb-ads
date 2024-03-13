@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 
 app.use(({ method, path, body }, res, next) => {
     logger.info({ method, path, body });
-    res.on('finish', () => {
+    res.once('finish', () => {
         logger.info({ method, path, body, status: res.statusCode });
     });
     next();
