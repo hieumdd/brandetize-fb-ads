@@ -52,7 +52,7 @@ jobs:
         with:
           service: ${{ env.SERVICE_NAME }}
           image: ${{ env.IMAGE }}
-          timeout: 500s
+          timeout: 1800s
           secrets: |
             DOPPLER_TOKEN=DOPPLER_TOKEN:latest
           flags: |
