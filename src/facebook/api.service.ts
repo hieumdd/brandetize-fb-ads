@@ -16,13 +16,7 @@ export const getClient = async () => {
         })
         .then(({ data }) => data.value.raw);
 
-    const apiVersion = await axios
-        .request({
-            method: 'GET',
-            url: 'https://graph.facebook.com/me',
-            params: { access_token: accessToken },
-        })
-        .then((response) => <string>response.headers['facebook-api-version']);
+    const apiVersion = 'v19.0';
 
     const client = axios.create({
         baseURL: `https://graph.facebook.com/${apiVersion}`,
