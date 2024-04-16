@@ -6,9 +6,9 @@ describe('runInsightsPipeline', () => {
         'runInsightsPipeline/$name',
         async (pipeline) => {
             return await runInsightsPipeline(pipeline, {
-                accountId: '662385836106323',
-                start: '2023-12-01',
-                end: '2024-12-01',
+                accountId: '408833080723726',
+                start: '2024-03-01',
+                end: '2024-05-01',
             })
                 .then((results) => expect(results).toBeDefined())
                 .catch((error) => {

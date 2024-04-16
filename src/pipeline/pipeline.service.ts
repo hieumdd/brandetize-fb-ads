@@ -33,7 +33,8 @@ export const createInsightsPipelineTasks = async ({ start, end }: CreatePipeline
     logger.info('Creating insights pipeline tasks', { start, end });
 
     const bucketName = await getBucketName();
-    const accounts = await Promise.all([618162358531378, 2030842403626659].map(getAccounts)).then((x) => x.flat());
+    const businessIds = ['618162358531378', '2030842403626659', '10152454842563460'];
+    const accounts = await Promise.all(businessIds.map(getAccounts)).then((x) => x.flat());
 
     return await Promise.all([
         Object.keys(pipelines)

@@ -1,6 +1,6 @@
 import { getClient } from './api.service';
 
-export const getAccounts = async (businessId: number) => {
+export const getAccounts = async (businessId: string) => {
     const client = await getClient();
 
     return await Promise.all(
